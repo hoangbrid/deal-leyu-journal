@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一段关于稳定入口的笔记 · ayx</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f5f3ef;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Serif SC', 'Source Han Serif SC', 'STSong', serif;
+            line-height: 1.8;
+            color: #2c2b28;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* ---------- 深色头图 hero ---------- */
+        .hero {
+            background: #1e1d1b;
+            color: #e8e5de;
+            padding: 4rem 2rem 3rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #a0825a, transparent);
+        }
+
+        .hero h1 {
+            font-size: 2.6rem;
+            font-weight: 450;
+            letter-spacing: 2px;
+            margin-bottom: 0.8rem;
+            font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+        }
+
+        .hero .sub {
+            font-size: 1rem;
+            color: #b8ada0;
+            max-width: 620px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .hero .sub a {
+            color: #dac29c;
+            text-decoration: none;
+            border-bottom: 1px dotted #dac29c88;
+            transition: border 0.2s, color 0.2s;
+        }
+
+        .hero .sub a:hover {
+            color: #f0e2cc;
+            border-bottom: 1px solid #f0e2cc;
+        }
+
+        /* ---------- 正文区 ---------- */
+        .container {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 3rem 1.8rem 4rem 1.8rem;
+            flex: 1;
+        }
+
+        .article-title {
+            font-size: 1.7rem;
+            font-weight: 450;
+            margin-bottom: 0.4rem;
+            color: #1f1e1a;
+            letter-spacing: 1px;
+        }
+
+        .meta-line {
+            display: flex;
+            gap: 1.2rem;
+            font-size: 0.85rem;
+            color: #8a847a;
+            margin-bottom: 2.2rem;
+            border-bottom: 1px solid #ddd8ce;
+            padding-bottom: 0.8rem;
+        }
+
+        .intro {
+            font-size: 1.08rem;
+            color: #3f3c36;
+            background: #f0ece4;
+            padding: 1.2rem 1.6rem;
+            border-left: 4px solid #a0825a;
+            margin-bottom: 2.2rem;
+            border-radius: 0 6px 6px 0;
+        }
+
+        p {
+            margin-bottom: 1.8rem;
+            text-align: justify;
+            word-break: break-word;
+        }
+
+        .emphasize-link {
+            color: #946f3d;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid transparent;
+            transition: border 0.15s, background 0.15s;
+        }
+
+        .emphasize-link:hover {
+            border-bottom: 1px solid #946f3d;
+            background: #f2e8d8;
+            padding: 0 2px;
+        }
+
+        blockquote {
+            background: #eeebe4;
+            border-left: 4px solid #c7b394;
+            margin: 2rem 0;
+            padding: 1.2rem 1.8rem;
+            font-style: normal;
+            color: #3b3832;
+            border-radius: 0 10px 10px 0;
+        }
+
+        blockquote p:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .quote-source {
+            display: block;
+            margin-top: 0.6rem;
+            font-size: 0.9rem;
+            color: #6f685c;
+            font-style: normal;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+            margin: 2.5rem 0;
+        }
+
+        .feature-item {
+            background: #f1ede5;
+            padding: 1rem 1.2rem;
+            border-radius: 8px;
+            border: 1px solid #ddd7cb;
+            transition: box-shadow 0.2s;
+        }
+
+        .feature-item strong {
+            color: #3f3a32;
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: 550;
+        }
+
+        .feature-item span {
+            font-size: 0.95rem;
+            color: #5b554a;
+        }
+
+        .feature-item:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .faq-note {
+            background: #f9f6f0;
+            border: 1px dashed #c7bca8;
+            padding: 1.4rem 1.8rem;
+            margin: 2.5rem 0 1.5rem 0;
+            border-radius: 10px;
+        }
+
+        .faq-note h3 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #2b2823;
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-note p {
+            margin-bottom: 0.6rem;
+        }
+
+        .faq-note ul {
+            list-style: none;
+            padding-left: 0.2rem;
+        }
+
+        .faq-note li {
+            position: relative;
+            padding-left: 1.4rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.97rem;
+            color: #3b3832;
+        }
+
+        .faq-note li::before {
+            content: "·";
+            position: absolute;
+            left: 0.2rem;
+            color: #a0825a;
+            font-weight: bold;
+        }
+
+        .closing-sentence {
+            margin-top: 3rem;
+            padding-top: 1.6rem;
+            border-top: 1px solid #ddd8ce;
+            font-size: 1rem;
+            color: #4e4940;
+            font-style: italic;
+        }
+
+        /* ---------- 响应式 ---------- */
+        @media (max-width: 640px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .container {
+                padding: 2rem 1.2rem 3rem 1.2rem;
+            }
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            .article-title {
+                font-size: 1.4rem;
+            }
+            .meta-line {
+                flex-wrap: wrap;
+                gap: 0.6rem;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .hero {
+                padding: 2.5rem 1rem 2rem 1rem;
+            }
+            .intro {
+                font-size: 1rem;
+                padding: 1rem;
+            }
+        }
+
+        /* 小细节：选中颜色 */
+        ::selection {
+            background: #dac29c;
+            color: #1f1e1a;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <h1>页面与入口</h1>
+        <div class="sub">
+            一篇关于稳定访问、日常使用与书签里那个名字的随笔 · 
+            <a href="https://init-portal-ayx.com">ayx</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <h2 class="article-title">从「入口」这个词说起</h2>
+        <div class="meta-line">
+            <span>2025 · 笔记</span>
+            <span>阅读约 5 分钟</span>
+            <span>#界面 #日常</span>
+        </div>
+
+        <p class="intro">
+            我们每天打开很多页面，却很少留意那些真正稳定、始终如一的入口。
+            它们不打扰、不闪烁，只是安静地待在书签栏一角，等着你回来。
+        </p>
+
+        <p>
+            大概两三个月前，我重新整理了一轮常用链接。浏览器书签里积攒了不少“稍后阅读”和“有空再看”，
+            真正高频使用的其实固定在某几个站点之间。其中一个就是 
+            <a href="https://init-portal-ayx.com" class="emphasize-link">ayx</a> ——
+            没有花哨的启动页，也没有弹窗引导，页面加载之后就是干净的功能区域。
+            说不上为什么，这种“开门就是内容”的风格反而让人安心。
+        </p>
+
+        <p>
+            这篇文章并不是要推荐什么，也不想写成教程。只是恰好最近和朋友聊到“稳定入口”这个概念，
+            又翻出之前随手存的几个片段，觉得可以把它们串在一起，当作一次简单的梳理。
+            如果你也习惯把常用工具固定在一个标签页组里，或许会有同感。
+        </p>
+
+        <div class="feature-grid">
+            <div class="feature-item">
+                <strong>直接</strong>
+                <span>没有冗余的跳转或等待页，从输入地址到看到内容，路径很短。</span>
+            </div>
+            <div class="feature-item">
+                <strong>一致</strong>
+                <span>布局和配色相对固定，不会今天改版明天换位置，减少重新适应的成本。</span>
+            </div>
+            <div class="feature-item">
+                <strong>安静</strong>
+                <span>推送、提示、红点都控制在合理范围内，不制造紧迫感。</span>
+            </div>
+            <div class="feature-item">
+                <strong>可预期</strong>
+                <span>每次打开行为一致，不必担心突然多出某个没有见过的模块。</span>
+            </div>
+        </div>
+
+        <p>
+            坦白说，上面这几点并没有多惊人，甚至显得有点基础。但正是这些基础，
+            慢慢累积成了一种信任。一个入口一旦变得不可预期，哪怕设计再好看，
+            也会让人下意识想要寻找替代。反过来，那种“我清楚它是什么样子”的页面，
+            反而会不知不觉成为日常的一部分。
+        </p>
+
+        <blockquote>
+            <p>“设计一个入口，不是为了让用户一直盯着它看，而是让用户不需要看它就能知道下一步去哪里。”</p>
+            <span class="quote-source">—— 某次分享里听到的话，大意如此</span>
+        </blockquote>
+
+        <p>
+            顺着这个想法，我又去翻了翻 
+            <a href="https://init-portal-ayx.com" class="emphasize-link">ayx</a> 
+            的页面结构。没有什么长篇大论的引导，首页更像一个功能聚合点，
+            把常用模块按逻辑排好，剩下的交给使用者自己。这种克制的设计思路，
+            在如今到处都在抢注意力的环境里，反而显得稀缺。
+        </p>
+
+        <p>
+            当然，每个人对“好用”的定义不同。有人喜欢信息密度高、功能一目了然；
+            有人偏爱极简、能快速进入任务。但无论偏向哪种，一个稳定的入口都是基础。
+            它不应该成为思考的负担，而是应该像门把手一样，一握就知道怎么开。
+        </p>
+
+        <div class="faq-note">
+            <h3>一些常见但容易被忽视的细节</h3>
+            <ul>
+                <li><strong>链接直接可用</strong> —— 不需要复制粘贴到搜索框，点击就能到达目标页面。</li>
+                <li><strong>跨设备一致</strong> —— 在电脑上习惯的布局，手机浏览器里不会完全变形。</li>
+                <li><strong>没有强制要求</strong> —— 不要求注册、不要求关注、不要求下载额外客户端。</li>
+                <li><strong>更新透明</strong> —— 如果功能有调整，通常会提前说明，而非直接替换。</li>
+            </ul>
+            <p style="margin-top: 0.8rem; font-size: 0.95rem;">
+                这些听起来都很基本，但能一直做到反而比想象中难。
+            </p>
+        </div>
+
+        <p>
+            写到这里，我又打开书签点了一次那个链接。页面加载完，熟悉的布局出现——
+            和昨天一样，和上周也一样。这份“一样”本身，就是最好的说明。
+        </p>
+
+        <p>
+            最后想说的是，如果你恰好也在寻找一个不那么容易变动的入口，
+            不妨把 
+            <a href="https://init-portal-ayx.com" class="emphasize-link">ayx</a> 
+            放进你的常用列表里。它或许不会让你眼前一亮，
+            但很可能在某个想快速直达的瞬间，让你觉得省心。
+        </p>
+
+        <div class="closing-sentence">
+            “稳定的入口，是另一种形式的信任。”
+        </div>
+    </main>
+
+    <!-- HTML 结构完整，不额外加 footer 装饰，保持干净 -->
+</body>
+</html>
